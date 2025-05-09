@@ -1,62 +1,114 @@
-#### Video Tutorial for this project
-https://youtu.be/SQ4A7Q6_md8
-<br><br>
+# Django + PostgreSQL + Docker Starter
 
-#### Getting the files
-Download zip file<br> 
-or <br>
-git clone command (need git to be installed) and remove git folder afterwards
-```
-git clone https://github.com/andyjud/django-starter.git . && rm -rf .git
-```
-<br><br><br>
+This project is a Django 5 application configured to use PostgreSQL as its database, with Docker support for easy local development. It includes user authentication (via django-allauth), profile management, and a modular app structure.
 
-## Setup
+---
 
-#### - Create Virtual Environment
-###### # Mac
+## Features
+
+* Django 5.x project structure
+* PostgreSQL database (configured for Docker)
+* User authentication and registration (django-allauth)
+* User profile management (view, edit, onboarding, settings)
+* Static and media file handling
+* Docker Compose for easy setup
+* Example apps: `a_home`, `a_users`
+* HTMX integration for dynamic UI
+
+---
+
+## Project Structure
+
 ```
-python3 -m venv venv
-source venv/bin/activate
+.
+├── a_core/         # Django project settings and core config
+├── a_home/         # Example app (home page, etc.)
+├── a_users/        # User profiles, registration, etc.
+├── static/         # Static files
+├── templates/      # Project-level templates
+├── postgres_data/  # PostgreSQL data and config (for Docker)
+├── db.sqlite3      # (Legacy/optional) SQLite DB
+├── manage.py
+├── requirements.txt
+├── docker-compose.yml
+└── README.md
 ```
 
-###### # Windows
-```
-python3 -m venv venv
-.\venv\Scripts\activate.bat
-```
+---
 
-<br>
+## Getting Started
 
-#### - Install dependencies
-```
-pip install --upgrade pip
-pip install -r requirements.txt
-```
+### Prerequisites
 
-<br>
+* [Docker](https://www.docker.com/get-started)
+* [Docker Compose](https://docs.docker.com/compose/)
+* (Optional) Python 3.10+ and pip (for local, non-Docker dev)
 
-#### - Migrate to database
-```
+### Quickstart with Docker
+
+1. **Clone the repository:**
+
+   ```sh
+   git clone <your-repo-url>
+   cd django_postgress_docker
+   ```
+
+2. **Build and run the Docker containers:**
+
+   ```sh
+   docker-compose up --build
+   ```
+
+3. **Apply migrations and create superuser:**
+
+   ```sh
+   docker-compose exec web python manage.py migrate
+   docker-compose exec web python manage.py createsuperuser
+   ```
+
+---
+
+## Configuration
+
+* **Database:** Configured in `a_core/settings.py` to use PostgreSQL on port `5431` (see `docker-compose.yml`).
+* **Static/Media:** Served from `/static/` and `/media/`.
+* **Authentication:** Uses `django-allauth` for email-based login.
+* **HTMX:** Included for dynamic frontend features.
+
+---
+
+## Useful Commands
+
+```sh
 python manage.py migrate
 python manage.py createsuperuser
-```
-
-<br>
-
-#### - Run application
-```
 python manage.py runserver
+pip install -r requirements.txt
+docker-compose exec web python manage.py migrate
+docker-compose exec web python manage.py createsuperuser
+docker-compose up --build
 ```
 
-<br>
+---
 
-#### - Generate Secret Key ( ! Important for deployment ! )
-```
-python manage.py shell
-from django.core.management.utils import get_random_secret_key
-print(get_random_secret_key())
-exit()
-```
+## Troubleshooting
 
+* If you change PostgreSQL config, restart the database container:
 
+  ```sh
+  docker-compose restart db
+  ```
+
+* For permission issues on `postgres_data/`, ensure your user has access.
+
+---
+
+## Default Accounts
+
+Create an admin user with `createsuperuser` as shown above.
+
+---
+
+## License
+
+MIT License (add your own license as needed).
